@@ -59,6 +59,6 @@ class Day1 extends AbstractDay
     protected function readinput()
     {
         $file = $this->config['input_path'] . 'day1.txt';
-        return explode("\n", file_get_contents($file));
+        return array_filter(explode("\n", file_get_contents($file)), 'strlen') ;
     }
 }
