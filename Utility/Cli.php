@@ -45,7 +45,6 @@ class Cli
     public function getDurationFormated()
     {
         $duration = $this->getDuration();
-        $this->logLine("raw duration: " . $duration);
         if ($duration < 0.001) {
             return (int)($duration * 1000000) . ' µs';
         }if ($duration < 0.01) {
