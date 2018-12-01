@@ -25,10 +25,18 @@ class Cli
      */
     public function __construct($config = null)
     {
-        $this->time = microtime(true);
+        $this->resetTimer();
         if (is_array($config)) {
             $this->config = array_merge($this->config, $config);
         }
+    }
+
+    /**
+     * Save the current time
+     */
+    public function resetTimer()
+    {
+        $this->time = microtime(true);
     }
 
     /**

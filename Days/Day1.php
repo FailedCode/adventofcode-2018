@@ -11,12 +11,13 @@ class Day1 extends AbstractDay
         $this->logLine("Day 1", self::$COLOR_GREEN);
 
         $resultFrequency = $this->part1();
-        $repeatedFrequency = $this->part2();
-
         $this->logLine("Result 1: $resultFrequency", self::$COLOR_GREEN);
-        $this->logLine("Result 2: $repeatedFrequency", self::$COLOR_LIGHT_GREEN);
         $this->logLine("Time: ". $this->getDurationFormated(), self::$COLOR_YELLOW);
 
+        $this->resetTimer();
+        $repeatedFrequency = $this->part2();
+        $this->logLine("Result 2: $repeatedFrequency", self::$COLOR_LIGHT_GREEN);
+        $this->logLine("Time: ". $this->getDurationFormated(), self::$COLOR_YELLOW);
     }
 
     protected function part1()
