@@ -24,12 +24,12 @@ class Day1 extends AbstractDay
     {
         $frequencies = $this->readinput();
 
-        // Start with 0 and add every number
-        $resultFrequency = 0;
-        foreach ($frequencies as $frequency) {
-            $resultFrequency += (int)$frequency;
-        }
-        return $resultFrequency;
+        return array_reduce(
+            $frequencies,
+            function ($carry, $value) {
+                return $carry += (int)$value;
+            }
+        );
     }
 
     protected function part2()
