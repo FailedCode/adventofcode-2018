@@ -15,7 +15,7 @@ class Cli
 
     /**
      * Measure time used
-     * @var int
+     * @var float
      */
     protected $time = 0;
 
@@ -25,14 +25,35 @@ class Cli
      */
     public function __construct($config = null)
     {
-        $this->time = time();
+        $this->time = microtime(true);
         if (is_array($config)) {
             $this->config = array_merge($this->config, $config);
         }
     }
 
+    /**
+     * @return float
+     */
     public function getDuration()
     {
-        return time() - $this->time;
+        return microtime(true) - $this->time;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDurationFormated()
+    {
+        $duration = $this->getDuration();
+        $this->logLine("raw duration: " . $duration);
+        if ($duration < 0.001) {
+            return (int)($duration * 1000000) . ' µs';
+        }if ($duration < 0.01) {
+            return (int)($duration * 1000) . ' ms';
+        }
+        if ($duration < 3) {
+            return number_format($duration, 2) . ' s';
+        }
+        return (int)$duration . ' s';
     }
 }
