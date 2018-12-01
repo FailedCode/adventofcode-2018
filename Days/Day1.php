@@ -12,12 +12,12 @@ class Day1 extends AbstractDay
 
         $resultFrequency = $this->part1();
         $this->logLine("Result 1: $resultFrequency", self::$COLOR_GREEN);
-        $this->logLine("Time: ". $this->getDurationFormated(), self::$COLOR_YELLOW);
+        $this->logLine("Time: " . $this->getDurationFormated(), self::$COLOR_YELLOW);
 
         $this->resetTimer();
         $repeatedFrequency = $this->part2();
         $this->logLine("Result 2: $repeatedFrequency", self::$COLOR_LIGHT_GREEN);
-        $this->logLine("Time: ". $this->getDurationFormated(), self::$COLOR_YELLOW);
+        $this->logLine("Time: " . $this->getDurationFormated(), self::$COLOR_YELLOW);
     }
 
     protected function part1()
@@ -60,6 +60,6 @@ class Day1 extends AbstractDay
     protected function readinput()
     {
         $file = $this->config['input_path'] . 'day1.txt';
-        return array_filter(explode("\n", file_get_contents($file)), 'strlen') ;
+        return array_filter(explode("\n", file_get_contents($file)), 'strlen');
     }
 }
