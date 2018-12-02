@@ -8,7 +8,7 @@ class Day2 extends AbstractDay
 {
     public function run()
     {
-        $this->logLine("Day 2", self::$COLOR_BLUE);
+        $this->logTitle();
 
         $part1 = $this->part1();
         $this->logLine("Result 1: $part1", self::$COLOR_GREEN);
