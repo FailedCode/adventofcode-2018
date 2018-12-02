@@ -49,6 +49,44 @@ class Day2 extends AbstractDay
 
     protected function part2()
     {
+        $inputlist = $this->readinput();
+        foreach ($inputlist as $id1) {
+            foreach ($inputlist as $id2) {
+                if ($id1 == $id2) {
+                    continue;
+                }
+
+                $common = $this->differenceOnceStrings($id1, $id2);
+                if (is_array($common))
+                {
+                    return implode('', $common);
+                }
+            }
+        }
+    }
+
+    protected function differenceOnceStrings($a, $b)
+    {
+        $commonChars = [];
+        $diffs = 0;
+        $aChars = str_split($a);
+        $bChars = str_split($b);
+
+        for ($i = 0; $i < count($aChars); $i++) {
+            if ($aChars[$i] == $bChars[$i]) {
+                $commonChars[] = $aChars[$i];
+            } else {
+                $diffs += 1;
+                if ($diffs > 1) {
+                    return false;
+                }
+            }
+        }
+
+        if ($diffs === 1) {
+            return $commonChars;
+        }
+        return false;
     }
 
     protected function readinput()
