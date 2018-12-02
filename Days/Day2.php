@@ -22,10 +22,10 @@ class Day2 extends AbstractDay
 
     protected function part1()
     {
-        $inputlist = $this->readinput();
+        $inputList = $this->readinput();
         $twice = 0;
         $thrice = 0;
-        foreach ($inputlist as $id) {
+        foreach ($inputList as $id) {
             $chars = str_split($id);
             $charCount = [];
             foreach ($chars as $char) {
@@ -49,9 +49,9 @@ class Day2 extends AbstractDay
 
     protected function part2()
     {
-        $inputlist = $this->readinput();
-        foreach ($inputlist as $id1) {
-            foreach ($inputlist as $id2) {
+        $inputList = $this->readinput();
+        foreach ($inputList as $id1) {
+            foreach ($inputList as $id2) {
                 if ($id1 == $id2) {
                     continue;
                 }
