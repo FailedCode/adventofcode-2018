@@ -53,9 +53,9 @@ class Cli
     public function getDurationFormated()
     {
         $duration = $this->getDuration();
-        if ($duration < 0.001) {
+        if ($duration < 0.01) {
             return (int)($duration * 1000000) . ' µs';
-        }if ($duration < 0.01) {
+        }if ($duration < 1) {
             return (int)($duration * 1000) . ' ms';
         }
         if ($duration < 3) {
