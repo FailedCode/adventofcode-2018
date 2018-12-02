@@ -30,4 +30,21 @@ abstract class AbstractDay extends Cli
         $day = $this->config['day_nr'];
         $this->logLine("Day $day", (($day % 2) ? self::$COLOR_GREEN : self::$COLOR_LIGHT_RED));
     }
+
+    /**
+     * @return string
+     */
+    protected function getInputFile()
+    {
+        $fileName = 'day' . $this->config['day_nr'] . '.txt';
+        $filePath = $this->config['input_path'] . $fileName;
+        if (!file_exists($filePath)) {
+            $this->logLine("Input File '$fileName' does not exist", self::$COLOR_RED);
+            exit(0);
+            //todo: fetch the file
+            // https://adventofcode.com/2018/day/<DAY>/input
+            // Personal Cookie needed
+        }
+        return $filePath;
+    }
 }

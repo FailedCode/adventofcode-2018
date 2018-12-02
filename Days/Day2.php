@@ -91,7 +91,7 @@ class Day2 extends AbstractDay
 
     protected function readinput()
     {
-        $file = $this->config['input_path'] . 'day2.txt';
+        $file = $this->getInputFile();
         return array_filter(explode("\n", file_get_contents($file)), 'strlen');
     }
 }
