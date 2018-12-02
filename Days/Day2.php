@@ -6,18 +6,13 @@ namespace AoC2018\Days;
 
 class Day2 extends AbstractDay
 {
+    protected $title = 'Inventory Management System';
+
     public function run()
     {
         $this->logTitle();
-
-        $part1 = $this->part1();
-        $this->logLine("Result 1: $part1", self::$COLOR_GREEN);
-        $this->logLine("Time: " . $this->getDurationFormated(), self::$COLOR_YELLOW);
-
-        $this->resetTimer();
-        $part2 = $this->part2();
-        $this->logLine("Result 2: $part2", self::$COLOR_LIGHT_GREEN);
-        $this->logLine("Time: " . $this->getDurationFormated(), self::$COLOR_YELLOW);
+        $this->logResult($this->part1());
+        $this->logResult($this->part2());
     }
 
     protected function part1()

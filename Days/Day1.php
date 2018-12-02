@@ -6,18 +6,13 @@ namespace AoC2018\Days;
 
 class Day1 extends AbstractDay
 {
+    protected $title = 'Chronal Calibration';
+
     public function run()
     {
         $this->logTitle();
-
-        $resultFrequency = $this->part1();
-        $this->logLine("Result 1: $resultFrequency", self::$COLOR_GREEN);
-        $this->logLine("Time: " . $this->getDurationFormated(), self::$COLOR_YELLOW);
-
-        $this->resetTimer();
-        $repeatedFrequency = $this->part2();
-        $this->logLine("Result 2: $repeatedFrequency", self::$COLOR_LIGHT_GREEN);
-        $this->logLine("Time: " . $this->getDurationFormated(), self::$COLOR_YELLOW);
+        $this->logResult($this->part1());
+        $this->logResult($this->part2());
     }
 
     protected function part1()

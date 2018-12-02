@@ -9,6 +9,10 @@ use AoC2018\Utility\Cli;
 abstract class AbstractDay extends Cli
 {
 
+    protected $title = '';
+
+    protected $resultCount = 0;
+
     public function __construct($config = null)
     {
         parent::__construct($config);
@@ -28,7 +32,20 @@ abstract class AbstractDay extends Cli
     protected function logTitle()
     {
         $day = $this->config['day_nr'];
-        $this->logLine("Day $day", (($day % 2) ? self::$COLOR_GREEN : self::$COLOR_LIGHT_RED));
+        $this->logLine("Day $day: {$this->title}", (($day % 2) ? self::$COLOR_GREEN : self::$COLOR_LIGHT_RED));
+    }
+
+    protected function logTime()
+    {
+        $this->logLine("Time: " . $this->getDurationFormated(), self::$COLOR_YELLOW);
+        $this->resetTimer();
+    }
+
+    protected function logResult($result)
+    {
+        $this->resultCount += 1;
+        $this->logLine("Result {$this->resultCount}: " . $this->colorString($result, self::$COLOR_BLUE));
+        $this->logTime();
     }
 
     /**
