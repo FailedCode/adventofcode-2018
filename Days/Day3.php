@@ -15,6 +15,14 @@ class Day3 extends AbstractDay
         $this->logResult($this->part2());
     }
 
+    /**
+     * - Create an array with all combinations
+     * - check if the combination overlaps
+     * - if so, stuff the overlapping coordinates into an array
+     * - result is the number of entries
+     *
+     * @return int
+     */
     protected function part1()
     {
         $tiles = $this->readinput();
@@ -107,6 +115,13 @@ class Day3 extends AbstractDay
         return $overlap;
     }
 
+    /**
+     * - Create an array with all combinations
+     * - check if the combination overlaps
+     * - if so, remove the ids from the tiles array
+     * - the last remaining key is the id of the rect not overlapping
+     * @return mixed
+     */
     protected function part2()
     {
         $tiles = $this->readinput();
@@ -125,6 +140,9 @@ class Day3 extends AbstractDay
     }
 
     /**
+     * Read the lines and make an array of coordinate pairs
+     * could've done the lower-right coordinate math right here...
+     *
      * @return array
      */
     protected function readinput()
