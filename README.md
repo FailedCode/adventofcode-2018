@@ -12,8 +12,24 @@ In case you do not have curl installed:
 
 `sudo apt-get install php-curl`
 
+Copy the .env.dist file
+
+`cp .env.dist .env`
+
+Insert your SESSION cookie for automated download of your personal puzzle input. 
+
 ## Run
 `./runDay.php 1`
+
+Run a day.
+
+`./runDay.php 1 2 3`
+
+Runs multiple days.
+
+`./runDay.php 2p2`
+
+Runs only the second part of day 2.
 
 ## Resources
 
