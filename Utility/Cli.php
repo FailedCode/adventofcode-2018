@@ -17,7 +17,7 @@ class Cli
      * Measure time used
      * @var float
      */
-    protected $time = 0;
+    protected $time = 0.0;
 
     /**
      * Modify default config, connect to databases
@@ -48,11 +48,16 @@ class Cli
     }
 
     /**
+     * @param null|float $duration
      * @return string
      */
-    public function getDurationFormated()
+    public function getDurationFormated($duration = null)
     {
-        $duration = $this->getDuration();
+        if (is_null($duration)) {
+            $duration = $this->getDuration();
+        } else {
+            $duration = (float)$duration;
+        }
         if ($duration < 0.01) {
             return (int)($duration * 1000000) . ' µs';
         }if ($duration < 1) {
