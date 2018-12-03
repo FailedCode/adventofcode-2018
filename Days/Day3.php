@@ -19,18 +19,13 @@ class Day3 extends AbstractDay
     {
         $tiles = $this->readinput();
         $combinations = $this->createCombinations($tiles);
-        $maxCombos = count($combinations);
         $overlappingTiles = [];
-        $i = 0;
         foreach ($combinations as $combo) {
             $tile1 = $combo[0];
             $tile2 = $combo[1];
-            $i += 1;
-            $p = (int)($i / $maxCombos) * 100.0;
-            if ($i % ((int)($maxCombos/100)) == 0) {
-                $this->logLine("$p%");
-            }
             $newOverlaps = $this->overlapTiles($tile1, $tile2);
+            // very important: empty arrays merge takes 900 s
+            // only doing it with filled arrays takes 3 s
             if ($newOverlaps !== false) {
                 $overlappingTiles = array_merge($overlappingTiles, $newOverlaps);
             }
@@ -60,7 +55,14 @@ class Day3 extends AbstractDay
         return $result;
     }
 
-    protected function overlapTiles($tile1, $tile2)
+    /**
+     * Returns either false or the coordinates of the collision rect
+     *
+     * @param $tile1
+     * @param $tile2
+     * @return array|bool
+     */
+    protected function rectsDoOverlap($tile1, $tile2)
     {
         // calculate the bottom-right corners
         $t1endX = $tile1['x'] + $tile1['w'];
@@ -75,13 +77,30 @@ class Day3 extends AbstractDay
         $Y2 = min($t1endY, $t2endY);
 
         if ($X1 > $X2 || $Y1 > $Y2) {
-            // no overlap
+            return false;
+        }
+
+        return compact('X1', 'Y1', 'X2', 'Y2');
+    }
+
+    /**
+     * Returns false where no collisions occurs or
+     * all coordinates as array keys
+     *
+     * @param $tile1
+     * @param $tile2
+     * @return array|bool
+     */
+    protected function overlapTiles($tile1, $tile2)
+    {
+        $overlapRect = $this->rectsDoOverlap($tile1, $tile2);
+        if (!$overlapRect) {
             return false;
         }
 
         $overlap = [];
-        for($y = $Y1; $y < $Y2; $y++) {
-            for($x = $X1; $x < $X2; $x++) {
+        for($y = $overlapRect['Y1']; $y < $overlapRect['Y2']; $y++) {
+            for($x = $overlapRect['X1']; $x < $overlapRect['X2']; $x++) {
                 $overlap["$x,$y"] = true;
             }
         }
@@ -90,9 +109,24 @@ class Day3 extends AbstractDay
 
     protected function part2()
     {
+        $tiles = $this->readinput();
+        $combinations = $this->createCombinations($tiles);
+        foreach ($combinations as $combo) {
+            $tile1 = $combo[0];
+            $tile2 = $combo[1];
+            $overlapRect = $this->rectsDoOverlap($tile1, $tile2);
+            if ($overlapRect !== false) {
+                unset($tiles[$tile1['id']]);
+                unset($tiles[$tile2['id']]);
+            }
+        }
 
+        return array_keys($tiles)[0];
     }
 
+    /**
+     * @return array
+     */
     protected function readinput()
     {
         $file = $this->getInputFile();
