@@ -8,13 +8,6 @@ class Day2 extends AbstractDay
 {
     protected $title = 'Inventory Management System';
 
-    public function run()
-    {
-        $this->logTitle();
-        $this->logResult($this->part1());
-        $this->logResult($this->part2());
-    }
-
     protected function part1()
     {
         $inputList = $this->readinput();

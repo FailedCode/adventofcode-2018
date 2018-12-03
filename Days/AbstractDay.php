@@ -25,9 +25,21 @@ abstract class AbstractDay extends Cli
         if (preg_match('~Day(\d+)~', static::class, $match)) {
             $this->config['day_nr'] = (int)$match[1];
         }
+        if (!isset($this->config['part'])) {
+            $this->config['part'] = 0;
+        }
     }
 
-    abstract public function run();
+    public function run()
+    {
+        $this->logTitle();
+        if ($this->config['part'] == 0 || $this->config['part'] == 1) {
+            $this->logResult($this->part1());
+        }
+        if ($this->config['part'] == 0 || $this->config['part'] == 2) {
+            $this->logResult($this->part2());
+        }
+    }
 
     protected function logTitle()
     {

@@ -8,13 +8,6 @@ class Day3 extends AbstractDay
 {
     protected $title = 'No Matter How You Slice It';
 
-    public function run()
-    {
-        $this->logTitle();
-        $this->logResult($this->part1());
-        $this->logResult($this->part2());
-    }
-
     /**
      * - Create an array with all combinations
      * - check if the combination overlaps

@@ -8,13 +8,6 @@ class Day1 extends AbstractDay
 {
     protected $title = 'Chronal Calibration';
 
-    public function run()
-    {
-        $this->logTitle();
-        $this->logResult($this->part1());
-        $this->logResult($this->part2());
-    }
-
     protected function part1()
     {
         $frequencies = $this->readinput();
