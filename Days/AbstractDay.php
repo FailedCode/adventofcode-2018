@@ -68,12 +68,46 @@ abstract class AbstractDay extends Cli
         $fileName = 'day' . $this->config['day_nr'] . '.txt';
         $filePath = $this->config['input_path'] . $fileName;
         if (!file_exists($filePath)) {
-            $this->logLine("Input File '$fileName' does not exist", self::$COLOR_RED);
-            exit(0);
-            //todo: fetch the file
-            // https://adventofcode.com/2018/day/<DAY>/input
-            // Personal Cookie needed
+            $this->logLine("Input File '$fileName' does not exist", self::$COLOR_YELLOW);
+
+            $input = $this->downloadPuzzleInput($this->config['day_nr']);
+            if (!$input) {
+                $this->logLine("Download the input file by hand or store your session Cookie in an .env file!", self::$COLOR_LIGHT_PURPLE);
+                exit(0);
+            }
+            $this->logLine("Saved downloaded input as $fileName", self::$COLOR_LIGHT_GREEN);
+            file_put_contents($filePath, $input);
         }
         return $filePath;
+    }
+
+    /**
+     * @param $dayNr
+     * @return bool|string
+     */
+    protected function downloadPuzzleInput($dayNr)
+    {
+        if (!isset($this->config["ENV_SESSION"])) {
+            return false;
+        }
+
+        $curl = \curl_init();
+        $options = [
+            CURLOPT_URL => "https://adventofcode.com/2018/day/$dayNr/input",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_COOKIE => "session=".$this->config["ENV_SESSION"],
+        ];
+        \curl_setopt_array($curl, $options);
+        $result = \curl_exec($curl);
+        $err = \curl_errno($curl);
+        $errmsg = \curl_error($curl);
+        \curl_close($curl);
+
+        if ($err) {
+            $this->logLine("Error downloading input for day $dayNr", self::$COLOR_RED);
+            $this->logLine($errmsg, self::$COLOR_RED);
+            return false;
+        }
+        return $result;
     }
 }

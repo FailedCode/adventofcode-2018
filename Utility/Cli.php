@@ -29,6 +29,26 @@ class Cli
         if (is_array($config)) {
             $this->config = array_merge($this->config, $config);
         }
+
+        $envFile = __dir__ .  '/../.env';
+        if (file_exists($envFile)) {
+            $lines = array_filter(explode("\n", file_get_contents($envFile)), 'strlen');
+            foreach ($lines as $line) {
+                // skip comments
+                if (preg_match('~^\s*#~', $line)) {
+                    continue;
+                }
+                if (strpos($line, '=') !== false) {
+                    $var = '';
+                    $value = '';
+                    list($var, $value) = explode('=', $line, 2);
+                    $var = strtoupper(trim($var));
+                    if (strlen($var) > 1) {
+                        $this->config["ENV_$var"] = $value;
+                    }
+                }
+            }
+        }
     }
 
     /**

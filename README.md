@@ -4,8 +4,13 @@ http://adventofcode.com/2018
 Solutions with PHP 7.2
 
 ## Install
-`composer dump`
+`composer install`
+
 [composer???](https://getcomposer.org/doc/00-intro.md)
+
+In case you do not have curl installed:
+
+`sudo apt-get install php-curl`
 
 ## Run
 `./runDay.php 1`
