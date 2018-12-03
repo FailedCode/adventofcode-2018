@@ -8,11 +8,13 @@ array_shift($argv);
 $cli = new \AoC2018\Utility\Cli();
 
 if (array_search('--help', $argv) !== false) {
-    $cli->logLine("Usage: ", $cli::$COLOR_YELLOW);
-    $cli->logLine("./runDay.php 1 => run day 1", $cli::$COLOR_WHITE);
-    $cli->logLine("./runDay.php 1 2 3 => run days 1, 2 and 3", $cli::$COLOR_WHITE);
-    $cli->logLine("./runDay.php 2p1 => run day 2 only part 1", $cli::$COLOR_WHITE);
-    $cli->logLine("./runDay.php 2p2 => run day 2 only part 2", $cli::$COLOR_WHITE);
+    $cli->logLines([
+        "Usage: " => $cli::$COLOR_YELLOW,
+        "./runDay.php 1 => run day 1" => $cli::$COLOR_WHITE,
+        "./runDay.php 1 2 3 => run days 1, 2 and 3" => $cli::$COLOR_WHITE,
+        "./runDay.php 2p1 => run day 2 only part 1" => $cli::$COLOR_WHITE,
+        "./runDay.php 2p2 => run day 2 only part 2" => $cli::$COLOR_WHITE,
+    ]);
     exit(0);
 }
 

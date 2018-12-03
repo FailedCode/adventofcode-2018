@@ -26,6 +26,18 @@ trait LogTrait
         $this->log("$text\n", $color);
     }
 
+    public function logLines($text)
+    {
+        if (is_array($text)) {
+            foreach ($text as $line => $color)
+            {
+                $this->logLine($line, $color);
+            }
+            return;
+        }
+        $this->log($text);
+    }
+
     /**
      * Output to console
      *
