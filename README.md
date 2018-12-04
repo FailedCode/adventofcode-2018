@@ -3,6 +3,12 @@ http://adventofcode.com/2018
 
 Solutions with PHP 7.2
 
+## Features
+  * Download Input of the day
+    * Doesn't override already existing files!
+  * Test mode
+    * Tweak the Puzzle code while making sure the solution doesn't get lost
+
 ## Install
 `composer install`
 
