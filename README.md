@@ -18,6 +18,12 @@ Copy the .env.dist file
 
 Insert your SESSION cookie for automated download of your personal puzzle input. 
 
+Copy the testvalues.php.dist file
+
+`cp Days/testvalues.php.dist Days/testvalues.php`
+
+testvalues.php ist used for refactoring. Known puzzle solutions are tested against to tell if a change broke the code.
+
 ## Run
 `./runDay.php 1`
 
@@ -30,6 +36,10 @@ Runs multiple days.
 `./runDay.php 2p2`
 
 Runs only the second part of day 2.
+
+`./runDay.php 2 --test`
+
+Tests, if the results for day 2 changed.
 
 ## Resources
 

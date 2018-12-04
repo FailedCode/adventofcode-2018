@@ -6,3 +6,4 @@ vendor/
 
 # Environment
 .env
+Days/testvalues.php

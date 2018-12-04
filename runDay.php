@@ -18,6 +18,11 @@ if (array_search('--help', $argv) !== false) {
     exit(0);
 }
 
+$testrun = false;
+if (array_search('--test', $argv) !== false) {
+    $testrun = true;
+}
+
 foreach ($argv as $i => $parameter) {
     $dayNr = 0;
     $partNr = 0;
@@ -42,7 +47,12 @@ foreach ($argv as $i => $parameter) {
         }
 
         $day = new $class(['part' => $partNr]);
-        $day->run();
+
+        if ($testrun) {
+            $day->runTest();
+        } else {
+            $day->run();
+        }
     }
 
 }

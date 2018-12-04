@@ -17,6 +17,7 @@ abstract class AbstractDay extends Cli
     {
         parent::__construct($config);
         $this->config['input_path'] = __dir__ . "/Input/";
+        $this->config['testvalue_path'] = __dir__ . "/testvalues.php";
 
         // self:: refers to the scope at the point of definition not at the point of execution
         // https://stackoverflow.com/questions/151969/when-to-use-self-over-this
@@ -38,6 +39,42 @@ abstract class AbstractDay extends Cli
         }
         if ($this->config['part'] == 0 || $this->config['part'] == 2) {
             $this->logResult($this->part2());
+        }
+    }
+
+    public function runTest()
+    {
+        if (!file_exists($this->config['testvalue_path'])) {
+            $this->logLine("No test values available!", self::$COLOR_YELLOW);
+            exit(0);
+        }
+        $testvalues = require($this->config['testvalue_path']);
+        $excpect1 = $testvalues[$this->config['day_nr']][0];
+        $excpect2 = $testvalues[$this->config['day_nr']][1];
+
+        // dont show something red when testing
+        $this->logLine("Day {$this->config['day_nr']}: {$this->title}", self::$COLOR_LIGHT_BLUE);
+
+        $this->runTestOnPart(1, $excpect1);
+        $this->runTestOnPart(2, $excpect2);
+    }
+
+    protected function runTestOnPart($part, $excpect)
+    {
+        if ($this->config['part'] != 0 && $this->config['part'] != $part) {
+            return;
+        }
+        if (empty($excpect)) {
+            $this->logLine("Part $part: Result not yet know!", self::$COLOR_YELLOW);
+        } else {
+            $method = "part$part";
+            $result = (string)$this->$method();
+            if ($excpect === $result) {
+                $this->logLine("Part $part: OK", self::$COLOR_LIGHT_GREEN);
+            } else {
+                $this->logLine("Part $part: FAILED", self::$COLOR_RED);
+                $this->logLine("Expected \"{$excpect}\" but got \"$result\" instead!", self::$COLOR_RED);
+            }
         }
     }
 
