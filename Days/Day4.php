@@ -12,7 +12,7 @@ class Day4 extends AbstractDay
     {
         $guards = $this->calculateGuardSleep();
 
-        usort($guards, function ($a, $b){
+        usort($guards, function ($a, $b) {
             if ($a['sleep'] == $b['sleep']) {
                 return 0;
             }
@@ -64,12 +64,8 @@ class Day4 extends AbstractDay
 
     protected function part2()
     {
-        $minutesMax = [];
-        $minutesGuard = [];
-        for ($i = 0; $i < 60; $i++) {
-            $minutesMax[$i] = 0;
-            $minutesGuard[$i] = 0;
-        }
+        $minutesMax = array_fill(0, 60, 0);
+        $minutesGuard = array_fill(0, 60, 0);
 
         $guards = $this->calculateGuardSleep();
         foreach ($guards as $guard) {
