@@ -66,11 +66,11 @@ class Day4 extends AbstractDay
 
         $guards = $this->calculateGuardSleep();
         foreach ($guards as $guard) {
-            foreach ($guard['minutes'] as $minute => $sleep) {
-                if ($sleep > $minutesMax[$minute]) {
-                    $minutesMax[$minute] = $sleep;
-                    $minutesGuard[$minute] = $guard['id'];
-                }
+            $minute = array_keys($guard['minutes'], max($guard['minutes']))[0];
+            $sleep = $guard['minutes'][$minute];
+            if ($sleep > $minutesMax[$minute]) {
+                $minutesMax[$minute] = $sleep;
+                $minutesGuard[$minute] = $guard['id'];
             }
         }
 
