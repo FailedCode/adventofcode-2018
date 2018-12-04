@@ -39,7 +39,7 @@ class Day4 extends AbstractDay
                     $guards[$currentGuard] = [
                         'id' => $currentGuard,
                         'sleep' => 0,
-                        'minutes' => [],
+                        'minutes' => array_fill(0, 60, 0),
                     ];
                 }
             }
@@ -50,9 +50,6 @@ class Day4 extends AbstractDay
                 } elseif ($record['state'] == 1) {
                     for ($i = $sleepStart; $i < $record['i']; $i++) {
                         $guards[$currentGuard]['sleep'] += 1;
-                        if (!isset($guards[$currentGuard]['minutes'][$i])) {
-                            $guards[$currentGuard]['minutes'][$i] = 0;
-                        }
                         $guards[$currentGuard]['minutes'][$i] += 1;
                     }
                 }
