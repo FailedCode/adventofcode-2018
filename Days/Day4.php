@@ -10,6 +10,24 @@ class Day4 extends AbstractDay
 
     protected function part1()
     {
+        $guards = $this->calculateGuardSleep();
+
+        usort($guards, function ($a, $b){
+            if ($a['sleep'] == $b['sleep']) {
+                return 0;
+            }
+            // notice the >
+            // sort the highest to position 0
+            return ($a['sleep'] > $b['sleep']) ? -1 : 1;
+        });
+
+        $guard = $guards[0];
+        $minute = array_keys($guard['minutes'], max($guard['minutes']))[0];
+        return $guard['id'] * $minute;
+    }
+
+    protected function calculateGuardSleep()
+    {
         $table = $this->getOrderedTimeTable();
         $guards = [];
         $currentGuard = '';
@@ -41,22 +59,32 @@ class Day4 extends AbstractDay
             }
         }
 
-        usort($guards, function ($a, $b){
-            if ($a['sleep'] == $b['sleep']) {
-                return 0;
-            }
-            // notice the >
-            // sort the highest to position 0
-            return ($a['sleep'] > $b['sleep']) ? -1 : 1;
-        });
-
-        $guard = $guards[0];
-        $minute = array_keys($guard['minutes'], max($guard['minutes']))[0];
-        return $guard['id'] * $minute;
+        return $guards;
     }
 
     protected function part2()
     {
+        $minutesMax = [];
+        $minutesGuard = [];
+        for ($i = 0; $i < 60; $i++) {
+            $minutesMax[$i] = 0;
+            $minutesGuard[$i] = 0;
+        }
+
+        $guards = $this->calculateGuardSleep();
+        foreach ($guards as $guard) {
+            foreach ($guard['minutes'] as $minute => $sleep) {
+                if ($sleep > $minutesMax[$minute]) {
+                    $minutesMax[$minute] = $sleep;
+                    $minutesGuard[$minute] = $guard['id'];
+                }
+            }
+        }
+
+        $minuteMax = array_keys($minutesMax, max($minutesMax))[0];
+        $guard = $minutesGuard[$minuteMax];
+
+        return $minuteMax * $guard;
     }
 
     protected function readinput()
