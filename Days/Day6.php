@@ -104,6 +104,26 @@ class Day6 extends AbstractDay
 
     protected function part2()
     {
+        $coordinates = $this->getCoordinates();
+        $boundingCoords = $this->getBoundingCoords($coordinates);
+        $Ymax = $boundingCoords[1][1];
+        $Xmax = $boundingCoords[1][0];
+
+        $maxDist = 10000;
+        $tiles = 0;
+        for ($y = 0; $y < $Ymax; $y++) {
+            for ($x = 0; $x < $Xmax; $x++) {
+                $totalDistance = 0;
+                foreach ($coordinates as $name => $coordinate) {
+                    $totalDistance += $this->manhattenDistance($coordinate, [$x, $y]);
+                }
+                if ($totalDistance < $maxDist) {
+                    $tiles += 1;
+                }
+            }
+        }
+
+        return $tiles;
     }
 
     protected function readinput()
