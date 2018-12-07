@@ -20,6 +20,16 @@ class Cli
      */
     public function __construct($config = null)
     {
+        // Instead of Notices, we throw exceptions
+        set_error_handler(function ($severity, $message, $filename, $lineno) {
+            if (error_reporting() == 0) {
+                return;
+            }
+            if (error_reporting() & $severity) {
+                throw new \ErrorException($message, 0, $severity, $filename, $lineno);
+            }
+        });
+
         $this->resetTimer();
         if (is_array($config)) {
             $this->config = array_merge($this->config, $config);
