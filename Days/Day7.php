@@ -53,6 +53,66 @@ class Day7 extends AbstractDay
 
     protected function part2()
     {
+        $taskTime = 60;
+        $workers = [
+            0 => ['task' => '', 'time' => 0],
+            1 => ['task' => '', 'time' => 0],
+            2 => ['task' => '', 'time' => 0],
+            3 => ['task' => '', 'time' => 0],
+            4 => ['task' => '', 'time' => 0],
+        ];
+        // $mustBeFinishedBefore = ['A' => ['C'], 'C' => [], 'F' => ['C'], 'B' => ['A'], 'E' => ['D'], 'D' => ['B']];
+        $mustBeFinishedBefore = $this->getSteps();
+        $time = 0;
+        while (true) {
+
+            $freeWorkers = [];
+            foreach ($workers as $id => &$worker) {
+                if ($worker['task'] === '') {
+                    $freeWorkers[] = $id;
+                    continue;
+                }
+
+                // the workers work on the task...
+                $worker['time'] -= 1;
+//                $this->logLine("[$time] worker $id works on {$worker['task']} {$worker['time']}s left");
+                if ($worker['time'] == 0) {
+                    $step = $worker['task'];
+                    $worker['task'] = '';
+                    // the task is done and no longer blocks following tasks
+                    $mustBeFinishedBefore = $this->removePrerequisite($mustBeFinishedBefore, $step);
+                    $freeWorkers[] = $id;
+//                    $this->logLine("[$time] worker $id done with $step");
+//                    $this->logLine(implode('', $finishedSteps));
+                }
+            }
+
+            while (count($freeWorkers) > 0) {
+                $nextStep = $this->getNextStep($mustBeFinishedBefore);
+                if ($nextStep === false) {
+                    //$this->logLine("[$time] No task available");
+                    break;
+                }
+                // remove the task, so the next worker doesn't get the same
+                unset($mustBeFinishedBefore[$nextStep]);
+                $id = array_shift($freeWorkers);
+                $workers[$id]['task'] = $nextStep;
+                $workers[$id]['time'] = $taskTime + ord($nextStep) - 64; // -64 => A = 1
+//                $this->logLine("[$time] worker $id starts with $nextStep, will take {$workers[$id]['time']}s");
+            }
+
+//            $this->logLine("[$time] Workers: {$workers[0]['task']}|{$workers[1]['task']}|{$workers[2]['task']}|{$workers[3]['task']}|{$workers[4]['task']}");
+
+            // If all workers are idle, there is nothing more to do
+            if (count($freeWorkers) == 5) {
+//                $this->logLine("[$time] all workers free: END");
+                break;
+            }
+
+            $time += 1;
+        }
+
+        return $time;
     }
 
     protected function readinput()
