@@ -42,6 +42,12 @@ class Day8 extends AbstractDay
 
     protected function part2()
     {
+        $numbers = $this->readinput();
+
+        $allNodes = [];
+        $root = $this->addNodeRecursive($allNodes, $numbers);
+
+        return $root->getValue();
     }
 
     protected function readinput()
