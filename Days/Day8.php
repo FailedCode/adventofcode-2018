@@ -20,7 +20,8 @@ class Day8 extends AbstractDay
         return array_reduce(
             $allNodes,
             function ($carry, $node) {
-                return $carry += $node->getMetaDataSum();
+                $carry += $node->getMetaDataSum();
+                return $carry;
             }
         );
     }

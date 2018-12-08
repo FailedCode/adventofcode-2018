@@ -15,7 +15,8 @@ class Day1 extends AbstractDay
         return array_reduce(
             $frequencies,
             function ($carry, $value) {
-                return $carry += (int)$value;
+                $carry += (int)$value;
+                return $carry;
             }
         );
     }

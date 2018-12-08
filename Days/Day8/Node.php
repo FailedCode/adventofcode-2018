@@ -53,7 +53,8 @@ class Node
         return array_reduce(
             $this->metaData,
             function ($carry, $value) {
-                return $carry += (int)$value;
+                $carry += (int)$value;
+                return $carry;
             }
         );
     }
