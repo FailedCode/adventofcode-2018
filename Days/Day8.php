@@ -54,6 +54,6 @@ class Day8 extends AbstractDay
     protected function readinput()
     {
         $file = $this->getInputFile();
-        return explode(" ", file_get_contents($file));
+        return array_map('intval', explode(" ", file_get_contents($file)));
     }
 }
