@@ -77,6 +77,7 @@ class Node
         }
         $value = 0;
         foreach ($this->metaData as $nodeId) {
+            // e.g. nodeId "1" means the first child, which is zero-indexed
             $key = $nodeId - 1;
             if (isset($this->children[$key])) {
                 $value += $this->children[$key]->getValue();
