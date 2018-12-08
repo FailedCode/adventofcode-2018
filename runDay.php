@@ -43,7 +43,7 @@ foreach ($argv as $i => $parameter) {
         $class = "AoC2018\Days\Day$dayNr";
 
         if (!file_exists("Days/Day$dayNr.php")) {
-            $cli->logLine("$class not (yet) implemented", $cli::$COLOR_RED);
+            $cli->logText("[Y]{$class}[LR] not (yet) implemented");
             continue;
         }
 

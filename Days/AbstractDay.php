@@ -51,7 +51,7 @@ abstract class AbstractDay extends Cli
         $excpect2 = $testvalues[$this->config['day_nr']][1];
 
         // dont show something red when testing
-        $this->logLine("Day {$this->config['day_nr']}: {$this->title}", self::$COLOR_LIGHT_BLUE);
+        $this->logText("[LB]Day [W]{$this->config['day_nr']}[LB]: [P]{$this->title}");
 
         $this->runTestOnPart(1, $excpect1);
         $this->runTestOnPart(2, $excpect2);
@@ -64,15 +64,16 @@ abstract class AbstractDay extends Cli
         }
         if (empty($excpect)) {
             $this->logLine("Part $part: Result not yet know!", self::$COLOR_YELLOW);
+            return;
+        }
+
+        $method = "part$part";
+        $result = (string)$this->$method();
+        if ($excpect === $result) {
+            $this->logText("[G]Part $part: [LG]OK");
         } else {
-            $method = "part$part";
-            $result = (string)$this->$method();
-            if ($excpect === $result) {
-                $this->logLine("Part $part: OK", self::$COLOR_LIGHT_GREEN);
-            } else {
-                $this->logLine("Part $part: FAILED", self::$COLOR_RED);
-                $this->logLine("Expected \"{$excpect}\" but got \"$result\" instead!", self::$COLOR_RED);
-            }
+            $this->logText("[R]Part $part: [LR]FAILED");
+            $this->logText("[R]Expected \"[B]{$excpect}[R]\" but got \"[BROWN]{$result}[R]\" instead!");
         }
     }
 
