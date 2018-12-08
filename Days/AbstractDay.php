@@ -11,8 +11,6 @@ abstract class AbstractDay extends Cli
 
     protected $title = '';
 
-    protected $resultCount = 0;
-
     public function __construct($config = null)
     {
         parent::__construct($config);
@@ -35,10 +33,10 @@ abstract class AbstractDay extends Cli
     {
         $this->logTitle();
         if ($this->config['part'] == 0 || $this->config['part'] == 1) {
-            $this->logResult($this->part1());
+            $this->logResult(1, $this->part1());
         }
         if ($this->config['part'] == 0 || $this->config['part'] == 2) {
-            $this->logResult($this->part2());
+            $this->logResult(2, $this->part2());
         }
     }
 
@@ -80,8 +78,10 @@ abstract class AbstractDay extends Cli
 
     protected function logTitle()
     {
-        $day = $this->config['day_nr'];
-        $this->logLine("Day $day: {$this->title}", (($day % 2) ? self::$COLOR_GREEN : self::$COLOR_LIGHT_RED));
+        $this->logLine(
+            "Day {$this->config['day_nr']}: {$this->title}",
+            (($this->config['day_nr'] % 2) ? self::$COLOR_GREEN : self::$COLOR_LIGHT_RED)
+        );
     }
 
     protected function logTime()
@@ -90,10 +90,9 @@ abstract class AbstractDay extends Cli
         $this->resetTimer();
     }
 
-    protected function logResult($result)
+    protected function logResult($part, $result)
     {
-        $this->resultCount += 1;
-        $this->logLine("Result {$this->resultCount}: " . $this->colorString($result, self::$COLOR_BLUE));
+        $this->logLine("Result $part: " . $this->colorString($result, self::$COLOR_BLUE));
         $this->logTime();
     }
 
