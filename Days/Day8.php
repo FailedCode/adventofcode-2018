@@ -29,7 +29,7 @@ class Day8 extends AbstractDay
     {
         $childNodes = array_shift($numbers);
         $metadataEntries = array_shift($numbers);
-        $node = new Node([$childNodes, $metadataEntries]);
+        $node = new Node($childNodes, $metadataEntries);
         $allNodes[] = $node;
         for ($i = 0; $i < $childNodes; $i++) {
             $node->addChildNode($this->addNodeRecursive($allNodes, $numbers));
