@@ -43,8 +43,9 @@ class Day9 extends AbstractDay
 
             }
             $currentPlayer = ($currentPlayer + 1) % $playerNumber;
+            $this->logProgress('percent-bar-big', $i, $maxMarbles+1);
         }
-
+        $this->logProgress('reset');
         return max($players);
     }
 
