@@ -46,6 +46,25 @@ trait TimerTrait
         if ($duration < 3) {
             return number_format($duration, 2) . ' s';
         }
-        return (int)$duration . ' s';
+
+        $seconds = (int)$duration;
+        $d1 = new \DateTime();
+        $d2 = new \DateTime();
+        $d2->add(new \DateInterval("PT{$seconds}S"));
+        $interval = $d2->diff($d1);
+        $output = [];
+        $hours = (int)$interval->format('%h');
+        if ($hours > 0) {
+            $output[] = "{$hours}h";
+        }
+        $minutes = (int)$interval->format('%i');
+        if ($minutes > 0) {
+            $output[] = "{$minutes}m";
+        }
+        $seconds = (int)$interval->format('%s');
+        if ($seconds > 0) {
+            $output[] = "{$seconds}s";
+        }
+        return implode(', ', $output);
     }
 }
