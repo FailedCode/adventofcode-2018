@@ -48,21 +48,16 @@ trait LogTrait
         $this->log(implode("", $output));
     }
 
+    /**
+     * Add Newline to output and display in a color
+     *
+     * @param $data
+     * @param null $color
+     */
     public function logLine($data, $color = null)
     {
         $text = $this->formatLog($data);
         $this->log("$text\n", $color);
-    }
-
-    public function logLines($text)
-    {
-        if (is_array($text)) {
-            foreach ($text as $line => $color) {
-                $this->logLine($line, $color);
-            }
-            return;
-        }
-        $this->log($text);
     }
 
     /**
@@ -79,6 +74,131 @@ trait LogTrait
         }
 
         echo "$output";
+    }
+
+    /**
+     * For long running processes to show some progress
+     *
+     * modes:
+     *   progress
+     *      circles through symbols to show process runs
+     *   percent
+     *      displays percent
+     *      66%
+     *   percent-bar-small
+     *      visual percent bar
+     *      [=====     ] 50%
+     *   percent-bar-big
+     *      visual percent bar
+     *      [=====                                                                                               ] 5%
+     *   absolute
+     *      Display absolute units
+     *      64/100
+     *      64...
+     *
+     *   reset
+     *      Removes the last progress output
+     *   reset-with-alert
+     *      Removes the last progress output and plays notification sound of console
+     *
+     * @param string $modus
+     * @param int|string $currentValue
+     * @param int $maxValue
+     */
+    public function logProgress($modus = 'simple', $currentValue = 0, $maxValue = 0)
+    {
+        static $lastOutput = '';
+        static $lastTime = 0;
+
+        // Do not update more than once a second unless its a reset
+        if ($lastTime > 0 && $lastTime == time() && strpos($modus, 'reset') === false) {
+            return;
+        }
+
+        // remove the last output
+        if (strlen($lastOutput) > 0) {
+            // go back
+            echo str_repeat(chr(8), strlen($lastOutput));
+            // overwrite with spaces
+            echo str_repeat(' ', strlen($lastOutput));
+            // go back again
+            echo str_repeat(chr(8), strlen($lastOutput));
+        }
+
+        switch ($modus) {
+            // the last output was removed, clean end
+            case 'reset':
+                $lastTime = 0;
+                $lastOutput = '';
+                return;
+            // cause the console to beep/system alert sound to play
+            case 'reset-with-alert':
+                print "\x07";
+                $lastTime = 0;
+                $lastOutput = '';
+                return;
+
+            case 'progress':
+            default:
+                $symbols = ['-', '\\', '|', '/'];
+                $key = array_search($lastOutput, $symbols);
+                if ($key === false) {
+                    $key = 0;
+                } else {
+                    $key = ($key + 1) % count($symbols);
+                }
+                $lastOutput = $symbols[$key];
+                break;
+
+            // 66%
+            case 'percent':
+                if ($maxValue <= 0) {
+                    $lastOutput = "?!%";
+                } else {
+                    $lastOutput = (int)(100 * $currentValue / $maxValue) . '%';
+                }
+                break;
+
+            // [=====     ] 50%
+            case 'percent-bar-small':
+                if ($maxValue <= 0) {
+                    $lastOutput = "?!%";
+                } else {
+                    $p = (int)(100 * $currentValue / $maxValue);
+                    $f = (int)$p / 10;
+                    if ($p / 10 < 1) {
+                        $filled = '>';
+                    } else {
+                        $filled = str_repeat('=', $f);
+                    }
+                    $left = str_repeat(' ', (10 - $f));
+                    $lastOutput = "[{$filled}{$left}] $p%";
+                }
+                break;
+
+            // [=====                                                                                               ] 5%
+            case 'percent-bar-big':
+                if ($maxValue <= 0) {
+                    $lastOutput = "?!%";
+                } else {
+                    $p = (int)(100 * $currentValue / $maxValue);
+                    $filled = str_repeat('=', $p);
+                    $left = str_repeat(' ', (100 - $p));
+                    $lastOutput = "[{$filled}{$left}] $p%";
+                }
+                break;
+
+            // 64/100
+            // 64...
+            case 'absolute':
+                if ($maxValue > 0) {
+                    $lastOutput = "$currentValue/$maxValue";
+                } else {
+                    $lastOutput = "$currentValue...";
+                }
+        }
+        $lastTime = time();
+        echo $lastOutput;
     }
 
     /**
@@ -112,7 +232,13 @@ trait LogTrait
         return (string)$data;
     }
 
-    protected function getColorAlias($color)
+    /**
+     * Translate short codes to color names
+     *
+     * @param string $color
+     * @return string
+     */
+    protected function getColorAlias($color = '')
     {
         $color = strtolower($color);
         $aliases = [
@@ -137,6 +263,13 @@ trait LogTrait
         return $color;
     }
 
+    /**
+     * Get the Terminal Color code for a color name
+     * or false if unknown color
+     *
+     * @param $color
+     * @return bool|mixed
+     */
     protected function getColor($color)
     {
         $colors = [
