@@ -14,6 +14,11 @@ class Day9 extends AbstractDay
         $playerNumber = $input['players'];
         $maxMarbles = $input['marbles'];
 
+        return $this->playMarbleGame($playerNumber, $maxMarbles);
+    }
+
+    protected function playMarbleGame($playerNumber, $maxMarbles)
+    {
         $players = array_fill(0, $playerNumber, 0);
         $marbles = [0 => 0];
         $currentMarble = 0;
@@ -45,6 +50,11 @@ class Day9 extends AbstractDay
 
     protected function part2()
     {
+        $input = $this->readinput();
+        $playerNumber = $input['players'];
+        $maxMarbles = $input['marbles'];
+
+        return $this->playMarbleGame($playerNumber, $maxMarbles * 100);
     }
 
     protected function readinput()
