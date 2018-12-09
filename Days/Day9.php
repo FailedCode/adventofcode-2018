@@ -3,6 +3,8 @@
 
 namespace AoC2018\Days;
 
+use AoC2018\Days\Day9\Marble;
+
 
 class Day9 extends AbstractDay
 {
@@ -19,28 +21,22 @@ class Day9 extends AbstractDay
 
     protected function playMarbleGame($playerNumber, $maxMarbles)
     {
+        // prevent segfault
+        // see https://bugs.php.net/bug.php?id=72411
+        gc_disable();
+
         $players = array_fill(0, $playerNumber, 0);
-        $marbles = [0 => 0];
-        $currentMarble = 0;
+        $currentMarble = new Marble(0);
         $currentPlayer = 0;
 
         for ($i = 1; $i < $maxMarbles + 1; $i++) {
-            $marbleCount = count($marbles);
-
             if (($i % 23) == 0) {
-                $currentMarble = ($currentMarble - 7 + $marbleCount) % $marbleCount;
-                $players[$currentPlayer] += $i + $marbles[$currentMarble];
-
-                array_splice($marbles, $currentMarble, 1);
-
-//                $marble = $marbles[$currentMarble];
-//                $this->logText(str_replace(" $marble ", $this->colorString(" ($marble) ", 'blue'), implode(' ', $marbles) . ' '));
+                $currentMarble = $currentMarble->getPrevious(7);
+                $players[$currentPlayer] += $i + $currentMarble->getValue();
+                $currentMarble = $currentMarble->remove();
             } else {
-                $currentMarble = ($currentMarble + 1) % $marbleCount;
-                array_splice($marbles, $currentMarble + 1, 0, $i);
-                $currentMarble = array_keys($marbles, $i)[0];
-//                $this->logText(str_replace(" $i ", $this->colorString(" ($i) ", 'blue'), (implode(' ', $marbles) . ' ')));
-
+                $currentMarble = $currentMarble->getNext(1);
+                $currentMarble = $currentMarble->insertAfter($i);
             }
             $currentPlayer = ($currentPlayer + 1) % $playerNumber;
             $this->logProgress('percent-bar-big', $i, $maxMarbles+1);
@@ -62,6 +58,6 @@ class Day9 extends AbstractDay
     {
         $file = $this->getInputFile();
         preg_match('~(\d+).*?(\d+).*~', file_get_contents($file), $matches);
-        return ['players' => $matches[1], 'marbles' => $matches[2]];
+        return ['players' => (int)$matches[1], 'marbles' => (int)$matches[2]];
     }
 }
