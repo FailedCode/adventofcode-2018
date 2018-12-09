@@ -68,11 +68,12 @@ abstract class AbstractDay extends Cli
         }
 
         $method = "part$part";
+        $this->resetTimer();
         $result = (string)$this->$method();
         if ($excpect === $result) {
-            $this->logText("[G]Part $part: [LG]OK");
+            $this->logText("[G]Part $part: [LG]OK [Y]({$this->getDurationFormated()})");
         } else {
-            $this->logText("[R]Part $part: [LR]FAILED");
+            $this->logText("[R]Part $part: [LR]FAILED [Y]({$this->getDurationFormated()})");
             $this->logText("[R]Expected \"[B]{$excpect}[R]\" but got \"[BROWN]{$result}[R]\" instead!");
         }
     }
