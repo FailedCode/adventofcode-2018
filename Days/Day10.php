@@ -15,18 +15,18 @@ class Day10 extends AbstractDay
     {
         $points = $this->getPoints();
 
-        $averageDistanceOld = PHP_INT_MAX;
-        $averageDistance = $this->averageDistance($points);
+        $areaOld = PHP_INT_MAX;
+        $area = $this->pointArea($points);
         $i = 0;
-        while ($averageDistanceOld > $averageDistance) {
+        while ($areaOld > $area) {
             $this->movePoints($points);
-            $averageDistanceOld = $averageDistance;
-            $averageDistance = $this->averageDistance($points);
+            $areaOld = $area;
+            $area = $this->pointArea($points);
             $i += 1;
-            $this->logProgress('progress-value', (int)$averageDistance);
+            $this->logProgress('progress-value', (int)$area);
         }
         $this->logProgress('reset');
-        $this->logText("Minimal average distance: [Y]{$averageDistance}[] (after [B]{$i}[] Iterations)");
+        $this->logText("Minimal average area: [Y]{$area}[] (after [B]{$i}[] Iterations)");
         $this->cachedTime = $i - 1;
         $this->movePoints($points, true);
         $this->normalizePoints($points);
@@ -51,38 +51,12 @@ class Day10 extends AbstractDay
         }
     }
 
-    protected function averageDistance($points)
+    protected function pointArea($points)
     {
-        $pointCount = count($points);
-        $distances = [];
-        foreach ($points as $key1 => $point1) {
-            foreach ($points as $key2 => $point2) {
-                if ($key1 == $key2) {
-                    continue;
-                }
-                $distances[] = $this->manhattenDistance($point1, $point2);
-            }
-            unset($points[$key1]);
-        }
-
-        $sum = array_reduce($distances, function ($carry, $value){
-            $carry += $value;
-            return $carry;
-        });
-
-        return $sum/$pointCount;
-    }
-
-    /**
-     * Input: Absolute coordinates
-     *
-     * @param array $point1 [x, y]
-     * @param array $point2 [x, y]
-     * @return int
-     */
-    protected function manhattenDistance($point1, $point2)
-    {
-        return abs($point1['x'] - $point2['x']) + abs($point1['y'] - $point2['y']);
+        $box = $this->getBoundingBox($points);
+        $w = $box[1][0] - $box[0][0];
+        $h = $box[1][1] - $box[0][1];
+        return $w * $h;
     }
 
     protected function getBoundingBox($points)
@@ -92,10 +66,18 @@ class Day10 extends AbstractDay
         $Ymin = PHP_INT_MAX;
         $Ymax = -1;
         foreach ($points as $point) {
-            if ($point['x'] < $Xmin) $Xmin = $point['x'];
-            if ($point['y'] < $Ymin) $Ymin = $point['y'];
-            if ($point['x'] > $Xmax) $Xmax = $point['x'];
-            if ($point['y'] > $Ymax) $Ymax = $point['y'];
+            if ($point['x'] < $Xmin) {
+                $Xmin = $point['x'];
+            }
+            if ($point['y'] < $Ymin) {
+                $Ymin = $point['y'];
+            }
+            if ($point['x'] > $Xmax) {
+                $Xmax = $point['x'];
+            }
+            if ($point['y'] > $Ymax) {
+                $Ymax = $point['y'];
+            }
         }
         return [[$Xmin, $Ymin], [$Xmax, $Ymax]];
     }
@@ -107,7 +89,7 @@ class Day10 extends AbstractDay
             $point['x'] -= $boundingBox[0][0];
             $point['y'] -= $boundingBox[0][1];
         }
-        usort($points, function($a, $b) {
+        usort($points, function ($a, $b) {
             $dy = $a['y'] - $b['y'];
             if ($dy == 0) {
                 return $a['x'] - $b['x'];
@@ -122,8 +104,8 @@ class Day10 extends AbstractDay
         $Ymax = $boundingBox[1][1] + 1;
         $Xmax = $boundingBox[1][0] + 1;
         $map = [];
-        for($y = 0; $y < $Ymax; $y++) {
-            for($x = 0; $x < $Xmax; $x++) {
+        for ($y = 0; $y < $Ymax; $y++) {
+            for ($x = 0; $x < $Xmax; $x++) {
                 foreach ($points as $point) {
                     if (!isset($map[$y][$x])) {
                         $map[$y][$x] = ' ';
@@ -141,7 +123,7 @@ class Day10 extends AbstractDay
         }
 
         $this->logLine('');
-        for($y = 0; $y < $Ymax; $y++) {
+        for ($y = 0; $y < $Ymax; $y++) {
             for ($x = 0; $x < $Xmax; $x++) {
                 $this->log($map[$y][$x]);
             }
@@ -168,7 +150,7 @@ class Day10 extends AbstractDay
             $Ymax = $Ystart + $height;
 
             $map = [];
-            for($y = $Ystart; $y < $Ymax; $y++) {
+            for ($y = $Ystart; $y < $Ymax; $y++) {
                 for ($x = $Xstart; $x < $Xmax; $x++) {
                     foreach ($points as $point) {
                         if (!isset($map[$y][$x])) {
@@ -204,18 +186,18 @@ class Day10 extends AbstractDay
             return $this->cachedTime;
         }
         $points = $this->getPoints();
-        $averageDistanceOld = PHP_INT_MAX;
-        $averageDistance = $this->averageDistance($points);
+        $areaOld = PHP_INT_MAX;
+        $area = $this->pointArea($points);
         $i = 0;
-        while ($averageDistanceOld > $averageDistance) {
+        while ($areaOld > $area) {
             $this->movePoints($points);
-            $averageDistanceOld = $averageDistance;
-            $averageDistance = $this->averageDistance($points);
+            $areaOld = $area;
+            $area = $this->pointArea($points);
             $i += 1;
-            $this->logProgress('progress-value', (int)$averageDistance);
+            $this->logProgress('progress-value', (int)$area);
         }
         $this->logProgress('reset');
-        return $i-1;
+        return $i - 1;
     }
 
     protected function readinput()
