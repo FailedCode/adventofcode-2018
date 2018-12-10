@@ -54,8 +54,8 @@ class Day10 extends AbstractDay
     protected function pointArea($points)
     {
         $box = $this->getBoundingBox($points);
-        $w = $box[1][0] - $box[0][0];
-        $h = $box[1][1] - $box[0][1];
+        $w = $box['max']['x'] - $box['min']['x'];
+        $h = $box['max']['y'] - $box['min']['y'];
         return $w * $h;
     }
 
@@ -66,28 +66,23 @@ class Day10 extends AbstractDay
         $Ymin = PHP_INT_MAX;
         $Ymax = -1;
         foreach ($points as $point) {
-            if ($point['x'] < $Xmin) {
-                $Xmin = $point['x'];
-            }
-            if ($point['y'] < $Ymin) {
-                $Ymin = $point['y'];
-            }
-            if ($point['x'] > $Xmax) {
-                $Xmax = $point['x'];
-            }
-            if ($point['y'] > $Ymax) {
-                $Ymax = $point['y'];
-            }
+            $Xmin = min($Xmin, $point['x']);
+            $Xmax = max($Xmax, $point['x']);
+            $Ymin = min($Ymin, $point['y']);
+            $Ymax = max($Ymax, $point['y']);
         }
-        return [[$Xmin, $Ymin], [$Xmax, $Ymax]];
+        return [
+            'min' => ['x' => $Xmin, 'y' => $Ymin],
+            'max' => ['x' => $Xmax, 'y' => $Ymax]
+        ];
     }
 
     protected function normalizePoints(&$points)
     {
         $boundingBox = $this->getBoundingBox($points);
         foreach ($points as &$point) {
-            $point['x'] -= $boundingBox[0][0];
-            $point['y'] -= $boundingBox[0][1];
+            $point['x'] -= $boundingBox['min']['x'];
+            $point['y'] -= $boundingBox['min']['y'];
         }
         usort($points, function ($a, $b) {
             $dy = $a['y'] - $b['y'];
@@ -101,8 +96,8 @@ class Day10 extends AbstractDay
     protected function drawPoints($points)
     {
         $boundingBox = $this->getBoundingBox($points);
-        $Ymax = $boundingBox[1][1] + 1;
-        $Xmax = $boundingBox[1][0] + 1;
+        $Ymax = $boundingBox['max']['y'] + 1;
+        $Xmax = $boundingBox['max']['x'] + 1;
         $map = [];
         for ($y = 0; $y < $Ymax; $y++) {
             for ($x = 0; $x < $Xmax; $x++) {
