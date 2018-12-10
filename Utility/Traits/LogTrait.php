@@ -150,6 +150,17 @@ trait LogTrait
                 $lastOutput = $symbols[$key];
                 break;
 
+            case 'progress-value':
+                $symbols = ['-', '\\', '|', '/'];
+                $key = array_search(substr($lastOutput, 0, 1), $symbols);
+                if ($key === false) {
+                    $key = 0;
+                } else {
+                    $key = ($key + 1) % count($symbols);
+                }
+                $lastOutput = $symbols[$key] . " [{$currentValue}]";
+                break;
+
             // 66%
             case 'percent':
                 if ($maxValue <= 0) {
