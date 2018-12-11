@@ -12,7 +12,7 @@ class Day11 extends AbstractDay
     {
         $gridSerialNumber = $this->readinput();
         $grid = $this->createGrid(300, $gridSerialNumber);
-        $subgridPos = $this->findLargestSubgrid($grid, 300, 3, 3);
+        list($subgridPos) = $this->findLargestSubgrid($grid, 300, 3, 3);
         return implode(',', $subgridPos);
     }
 
@@ -63,7 +63,7 @@ class Day11 extends AbstractDay
      * @param int $gridMax
      * @param int $subWidth
      * @param int $subHeight
-     * @return array[x, y]
+     * @return array[[x, y], MaxValue]
      */
     protected function findLargestSubgrid($grid, $gridMax, $subWidth, $subHeight)
     {
@@ -89,11 +89,41 @@ class Day11 extends AbstractDay
             }
         }
 
-        return $subGrid;
+        return [$subGrid, $subGridMaxValue];
     }
 
     protected function part2()
     {
+        $gridSerialNumber = $this->readinput();
+        $grid = $this->createGrid(300, $gridSerialNumber);
+        $subgridMax = $this->findLargestSubgridSize($grid, 300);
+        return implode(',', $subgridMax);
+    }
+
+    /**
+     * Find the subgrid size with the highest absolute value
+     * takes about 40min to finish
+     *
+     * @param array $grid
+     * @param int $gridMax
+     * @param int $subGridMin
+     * @return array
+     */
+    protected function findLargestSubgridSize($grid, $gridMax, $subGridMin = 3)
+    {
+        $subGridMaxValue = PHP_INT_MIN;
+        $subGrid = [null, null, null];
+        for ($i = $subGridMin; $i < $gridMax + 1; $i++) {
+            list($newSubGrid, $newSubGridValue) = $this->findLargestSubgrid($grid, $gridMax, $i, $i);
+            if ($newSubGridValue > $subGridMaxValue) {
+                $subGridMaxValue = $newSubGridValue;
+                $subGrid = $newSubGrid;
+                $subGrid[] = $i;
+            }
+            $this->logProgress('percent-bar-small', $i, $gridMax);
+        }
+        $this->logProgress('reset');
+        return $subGrid;
     }
 
     protected function readinput()
