@@ -109,6 +109,7 @@ trait LogTrait
     {
         static $lastOutput = '';
         static $lastTime = 0;
+        static $lastValue = 0;
 
         // Do not update more than once a second unless its a reset
         if ($lastTime > 0 && $lastTime == time() && strpos($modus, 'reset') === false) {
@@ -196,6 +197,19 @@ trait LogTrait
                     $filled = str_repeat('=', $p);
                     $left = str_repeat(' ', (100 - $p));
                     $lastOutput = "[{$filled}{$left}] $p%";
+                }
+                break;
+
+            case 'speed':
+                if ($maxValue > 0) {
+                    if ($lastValue > 0) {
+                        $diff = $currentValue - $lastValue;
+                        $time = ($maxValue - $currentValue) / $diff;
+                        $lastOutput = $this->getDurationFormated($time) . " ($diff per s)";
+                    }
+                    $lastValue = $currentValue;
+                } else {
+                    $lastOutput = "need max value!";
                 }
                 break;
 
