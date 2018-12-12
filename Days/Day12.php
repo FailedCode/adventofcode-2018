@@ -90,7 +90,8 @@ class Day12 extends AbstractDay
         $pots = $input['init'];
         $rules = $input['rules'];
 
-        $generations = 5000000000;
+        //            100100100100
+        $generations = 50000000000;
 
         $potCount = array_reduce($pots, function ($carry, $value) {
             $carry += $value;
@@ -139,7 +140,6 @@ class Day12 extends AbstractDay
 
         $restGenerations = $generations - $i;
 
-        // to low 360000002094
         return $this->calculatePotSum($pots) + ($convergePotCount * $restGenerations);
     }
 
