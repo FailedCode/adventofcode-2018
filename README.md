@@ -54,4 +54,6 @@ Tests, if the results for day 2 changed.
     * [New PHP 7.1 Features](http://php.net/manual/en/migration71.new-features.php)
     * [New PHP 7.2 Features](http://php.net/manual/en/migration72.new-features.php)
   * You might like "Modern PHP" by Josh Lockhart 
-
+  * Day 11: [Summed-area table](https://en.wikipedia.org/wiki/Summed-area_table)
+    * The first brute force approach took 40 minutes
+    * Building and using an lookup table reduced the time down to 2.37 seconds
