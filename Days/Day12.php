@@ -90,8 +90,7 @@ class Day12 extends AbstractDay
         $pots = $input['init'];
         $rules = $input['rules'];
 
-        //            100100100100
-        $generations = 50000000000;
+        $generations = 5 * 10 ** 10;
 
         $potCount = array_reduce($pots, function ($carry, $value) {
             $carry += $value;
@@ -129,11 +128,11 @@ class Day12 extends AbstractDay
             // we only need to know at which speed and we can calculate the pot numbers
             // without actually running a simulation
             if ($convergePotCount == $potCount && $convergeMovement == $movement) {
-                $this->logText(
-                    "converges on [Y]{$convergePotCount}[] pots filled after [Y]{$i}[] generations\n" .
-                    "sum increasing by [Y]{$convergeSumDiff}[]\n" .
-                    "moves [Y]{$convergeMovement}[] per generation"
-                );
+//                $this->logText(
+//                    "converges on [Y]{$convergePotCount}[] pots filled after [Y]{$i}[] generations\n" .
+//                    "sum increasing by [Y]{$convergeSumDiff}[]\n" .
+//                    "moves [Y]{$convergeMovement}[] per generation"
+//                );
                 break;
             }
         }
