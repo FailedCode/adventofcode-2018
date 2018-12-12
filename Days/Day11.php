@@ -39,7 +39,7 @@ class Day11 extends AbstractDay
     }
 
     /**
-     * Create an array filles with calculated power
+     * Create an array filled with calculated power
      *
      * @param int $gridMax
      * @param int $gridSerialNumber
@@ -99,20 +99,15 @@ class Day11 extends AbstractDay
         $gridMax = 300;
         $grid = $this->createGrid($gridMax, $gridSerialNumber);
 
-
-        $this->logText("Building Lookup Table... ");
         $summedAreaTable = $this->createSummedAreaTable($grid, $gridMax);
-        $this->logText("[G]OK");
-
-        $this->logText("Searching largest Subgrid...");
         $subgridMax = $this->findLargestSubgridFromAreaTable($summedAreaTable, $gridMax);
 
         return implode(',', $subgridMax);
     }
 
     /**
-     * Could be faster if previous sums where reused...
-     * takes about 1m, 25s
+     * simple approach for filling takes about 1m, 25s
+     * Reusing sums takes 26ms
      *
      * @param array $grid
      * @param int $gridMax
@@ -124,17 +119,27 @@ class Day11 extends AbstractDay
         $i = 0;
         for ($y = 1; $y < $gridMax + 1; $y++) {
             for ($x = 1; $x < $gridMax + 1; $x++) {
-                $summedAreaTable[$y][$x] = 0;
-                for ($ys = 1; $ys < $y + 1; $ys++) {
-                    for ($xs = 1; $xs < $x + 1; $xs++) {
-                        $summedAreaTable[$y][$x] += $grid[$ys][$xs];
-                    }
+                $sum = $grid[$y][$x];
+                $px = $x - 1;
+                $py = $y - 1;
+
+                // Upper Right
+                if ($py >= 1) {
+                    $sum += $summedAreaTable[$py][$x];
                 }
+                // Bottom Left
+                if ($px >= 1) {
+                    $sum += $summedAreaTable[$y][$px];
+                }
+                // Upper Left
+                if ($py >= 1 && $px >= 1) {
+                    $sum -= $summedAreaTable[$py][$px];
+                }
+                $summedAreaTable[$y][$x] = $sum;
+
                 $i += 1;
-                $this->logProgress('percent-bar-small', $i, $gridMax * $gridMax);
             }
         }
-        $this->logProgress('reset');
         return $summedAreaTable;
     }
 
@@ -142,6 +147,7 @@ class Day11 extends AbstractDay
      * Find the subgrid size with the highest absolute value
      * https://en.wikipedia.org/wiki/Summed-area_table
      * simple approach took about 40min to finish
+     * search now takes ~2 seconds
      *
      * @param array $summedAreaTable
      * @param int $gridMax
