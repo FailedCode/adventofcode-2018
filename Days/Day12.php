@@ -14,16 +14,16 @@ class Day12 extends AbstractDay
         $pots = $input['init'];
         $rules = $input['rules'];
 
-        $this->logText("0 ) " . array_reduce($pots, function ($carry, $value) {
-                $carry .= $value ? '#' : '.';
-                return $carry;
-            }));
+//        $this->logText("0 ) " . array_reduce($pots, function ($carry, $value) {
+//                $carry .= $value ? '#' : '.';
+//                return $carry;
+//            }));
         for ($i = 1; $i < 21; $i++) {
             $pots = $this->calculateNewGeneration($pots, $rules);
-            $this->logText(str_pad($i, 2) .") " . array_reduce($pots, function ($carry, $value) {
-                    $carry .= $value ? '#' : '.';
-                    return $carry;
-                }));
+//            $this->logText(str_pad($i, 2) .") " . array_reduce($pots, function ($carry, $value) {
+//                    $carry .= $value ? '#' : '.';
+//                    return $carry;
+//                }));
         }
 
         return $this->calculatePotSum($pots);
@@ -86,7 +86,63 @@ class Day12 extends AbstractDay
 
     protected function part2()
     {
+        $input = $this->readinput();
+        $pots = $input['init'];
+        $rules = $input['rules'];
+
+        $generations = 5000000000;
+
+        $potCount = array_reduce($pots, function ($carry, $value) {
+            $carry += $value;
+            return $carry;
+        });
+        $convergePotCount = $potCount;
+
+        reset($pots);
+        $lastFirstFilledPot = key($pots);
+        $convergeMovement = 0;
+
+        $lastSum = 0;
+        $convergeSumDiff = 0;
+
+        for ($i = 1; $i < $generations + 1; $i++) {
+            $pots = $this->calculateNewGeneration($pots, $rules);
+            $potCount = array_reduce($pots, function ($carry, $value) {
+                $carry += $value;
+                return $carry;
+            });
+            $convergePotCount = ($convergePotCount + $potCount) / 2.0;
+
+            $sum = $this->calculatePotSum($pots);
+            $sumDiff = $sum - $lastSum;
+            $convergeSumDiff = ($convergeSumDiff + $sumDiff) / 2.0;
+            $lastSum = $sum;
+
+            reset($pots);
+            $firstFilledPot = key($pots);
+            $movement = $firstFilledPot - $lastFirstFilledPot;
+            $convergeMovement = ($convergeMovement + $movement) / 2.0;
+            $lastFirstFilledPot = $firstFilledPot;
+
+            // if the plants only grow in one direction with the same repeating pattern
+            // we only need to know at which speed and we can calculate the pot numbers
+            // without actually running a simulation
+            if ($convergePotCount == $potCount && $convergeMovement == $movement) {
+                $this->logText(
+                    "converges on [Y]{$convergePotCount}[] pots filled after [Y]{$i}[] generations\n" .
+                    "sum increasing by [Y]{$convergeSumDiff}[]\n" .
+                    "moves [Y]{$convergeMovement}[] per generation"
+                );
+                break;
+            }
+        }
+
+        $restGenerations = $generations - $i;
+
+        // to low 360000002094
+        return $this->calculatePotSum($pots) + ($convergePotCount * $restGenerations);
     }
+
 
     protected function readinput()
     {
