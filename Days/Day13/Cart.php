@@ -53,8 +53,13 @@ class Cart
         $this->y = $y;
         $this->direction = $direction;
         $this->crossDirection = self::TURN_LEFT;
-        self::$allCarts[] = $this;
+        self::$allCarts[$this->name] = $this;
         self::$id += 1;
+    }
+
+    public function getPosition()
+    {
+        return [$this->x, $this->y];
     }
 
     public function getNextPosition()
@@ -131,5 +136,20 @@ class Cart
         foreach (self::$allCarts as $cart) {
             $cart->hasMoved = false;
         }
+    }
+
+    public static function count()
+    {
+        return count(self::$allCarts);
+    }
+
+    public static function removeCart($cart)
+    {
+        unset(self::$allCarts[$cart->name]);
+    }
+
+    public static function getCarts()
+    {
+        return self::$allCarts;
     }
 }

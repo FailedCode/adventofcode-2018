@@ -18,20 +18,20 @@ class Day13 extends AbstractDay
         $i = 0;
         while ($collision === false) {
             if ($isTest) {
-                $this->drawTrack($tracks, $width, $height, $carts, $i>0);
+                $this->drawTrack($tracks, $width, $height, $carts, $i > 0);
                 sleep(1);
+                $i += 1;
             }
             $collision = $this->moveCarts($tracks, $width, $height, $carts);
-            $i += 1;
         }
 
         return implode(',', $collision);
     }
 
-    protected function drawTrack($tracks, $width, $height, $carts, $erease=true)
+    protected function drawTrack($tracks, $width, $height, $carts, $erease = true)
     {
         if ($erease) {
-            echo chr(27) . "[" . $height ."A";
+            echo chr(27) . "[" . $height . "A";
         }
 
         for ($y = 0; $y < $height; $y++) {
@@ -49,7 +49,7 @@ class Day13 extends AbstractDay
         }
     }
 
-    protected function moveCarts(&$tracks, $width, $height, &$carts)
+    protected function moveCarts(&$tracks, $width, $height, &$carts, $stopOnCollission = true)
     {
         Cart::resetMoves();
         for ($y = 0; $y < $height; $y++) {
@@ -69,7 +69,15 @@ class Day13 extends AbstractDay
 
                 if (!is_null($carts[$newY][$newX])) {
                     // collision
-                    return [$newX, $newY];
+                    if ($stopOnCollission) {
+                        return [$newX, $newY];
+                    } else {
+                        Cart::removeCart($cart);
+                        $carts[$y][$x] = null;
+
+                        Cart::removeCart($carts[$newY][$newX]);
+                        $carts[$newY][$newX] = null;
+                    }
                 } else {
                     $carts[$y][$x] = null;
                     $carts[$newY][$newX] = $cart;
@@ -83,6 +91,27 @@ class Day13 extends AbstractDay
 
     protected function part2()
     {
+        $isTest = false;
+        list($tracks, $width, $height, $carts) = $this->buildTracks($isTest);
+
+        $cartCount = Cart::count();
+        $startCount = $cartCount;
+        $i = 0;
+        while ($cartCount > 1) {
+            if ($isTest) {
+                $this->drawTrack($tracks, $width, $height, $carts, $i > 0);
+                sleep(1);
+                $i += 1;
+            }
+            $this->moveCarts($tracks, $width, $height, $carts, false);
+            $cartCount = Cart::count();
+            $this->logProgress('absolute', ($startCount - $cartCount), $startCount);
+        }
+        $this->logProgress('reset');
+
+        $carts = Cart::getCarts();
+        $lastCart = array_values($carts)[0];
+        return implode(',', $lastCart->getPosition());
     }
 
     protected function readinput()
@@ -91,16 +120,28 @@ class Day13 extends AbstractDay
         return array_filter(explode("\n", file_get_contents($file)), 'strlen');
     }
 
-    protected function testInput()
+    protected function testInput($nr)
     {
-        return [
-            '/->-\        ',
-            '|   |  /----\\',
-            '| /-+--+-\  |',
-            '| | |  | v  |',
-            '\-+-/  \-+--/',
-            '  \------/   ',
+        $tracks = [
+            1 => [
+                '/->-\        ',
+                '|   |  /----\\',
+                '| /-+--+-\  |',
+                '| | |  | v  |',
+                '\-+-/  \-+--/',
+                '  \------/   ',
+            ],
+            2 => [
+                '/>-<\  ',
+                '|   |  ',
+                '| /<+-\\',
+                '| | | v',
+                '\>+</ |',
+                '  |   ^',
+                '  \<->/',
+            ],
         ];
+        return $tracks[$nr];
     }
 
     /**
@@ -110,7 +151,7 @@ class Day13 extends AbstractDay
     protected function buildTracks($testTracks = false)
     {
         if ($testTracks) {
-            $lines = $this->testInput();
+            $lines = $this->testInput($testTracks);
         } else {
             $lines = $this->readinput();
         }
