@@ -99,22 +99,30 @@ abstract class AbstractDay extends Cli
     }
 
     /**
+     * A nickname can be used to load other peoples input for test/debugging
+     *
+     * @param string $nickname
      * @return string
      */
-    protected function getInputFile()
+    protected function getInputFile($nickname = '')
     {
-        $fileName = 'day' . $this->config['day_nr'] . '.txt';
-        $filePath = $this->config['input_path'] . $fileName;
+        $fileName = implode('', ['day', $this->config['day_nr'], (!empty($nickname) ? "-$nickname" : ''), '.txt']);
+        $filePath = $this->config['input_path'] . (!empty($nickname) ? 'Others/' : '') . $fileName;
         if (!file_exists($filePath)) {
-            $this->logLine("Input File '$fileName' does not exist", self::$COLOR_YELLOW);
+            $this->logLine("Input File '$filePath' does not exist", self::$COLOR_YELLOW);
 
-            $input = $this->downloadPuzzleInput($this->config['day_nr']);
-            if (!$input) {
-                $this->logLine("Download the input file by hand or store your session Cookie in an .env file!", self::$COLOR_LIGHT_PURPLE);
+            if ($nickname === '') {
+                $input = $this->downloadPuzzleInput($this->config['day_nr']);
+                if (!$input) {
+                    $this->logLine("Download the input file by hand or store your session Cookie in an .env file!", self::$COLOR_LIGHT_PURPLE);
+                    exit(0);
+                }
+                $this->logLine("Saved downloaded input as $fileName", self::$COLOR_LIGHT_GREEN);
+                file_put_contents($filePath, $input);
+            }
+            if (!file_exists($filePath)) {
                 exit(0);
             }
-            $this->logLine("Saved downloaded input as $fileName", self::$COLOR_LIGHT_GREEN);
-            file_put_contents($filePath, $input);
         }
         return $filePath;
     }
