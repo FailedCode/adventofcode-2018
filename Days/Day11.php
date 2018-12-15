@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day11 extends AbstractDay
 {
     protected $title = 'Chronal Charge';
@@ -75,7 +74,6 @@ class Day11 extends AbstractDay
 
         for ($y = 1; $y < $subGridMaxY + 1; $y++) {
             for ($x = 1; $x < $subGridMaxX + 1; $x++) {
-
                 $subGridValue = 0;
                 for ($sy = 0; $sy < $subHeight; $sy++) {
                     for ($sx = 0; $sx < $subWidth; $sx++) {
@@ -159,10 +157,8 @@ class Day11 extends AbstractDay
         $subGridMaxValue = PHP_INT_MIN;
         $subGrid = [null, null, null];
         for ($i = $subGridMin; $i < $gridMax + 1; $i++) {
-
             for ($y = $i; $y < $gridMax + 1; $y++) {
                 for ($x = $i; $x < $gridMax + 1; $x++) {
-
                     $sum = $summedAreaTable[$y][$x];
                     $px = $x - $i;
                     $py = $y - $i;

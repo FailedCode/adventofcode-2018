@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day12 extends AbstractDay
 {
     protected $title = 'Subterranean Sustainability';

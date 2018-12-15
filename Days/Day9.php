@@ -5,7 +5,6 @@ namespace AoC2018\Days;
 
 use AoC2018\Days\Day9\Marble;
 
-
 class Day9 extends AbstractDay
 {
     protected $title = 'Marble Mania';

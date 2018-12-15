@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day4 extends AbstractDay
 {
     protected $title = 'Repose Record';

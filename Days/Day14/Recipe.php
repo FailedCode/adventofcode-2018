@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days\Day14;
 
-
 use AoC2018\Utility\Cli;
 
 class Recipe

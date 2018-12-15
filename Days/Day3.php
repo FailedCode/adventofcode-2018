@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day3 extends AbstractDay
 {
     protected $title = 'No Matter How You Slice It';
@@ -100,8 +99,8 @@ class Day3 extends AbstractDay
         }
 
         $overlap = [];
-        for($y = $overlapRect['Y1']; $y < $overlapRect['Y2']; $y++) {
-            for($x = $overlapRect['X1']; $x < $overlapRect['X2']; $x++) {
+        for ($y = $overlapRect['Y1']; $y < $overlapRect['Y2']; $y++) {
+            for ($x = $overlapRect['X1']; $x < $overlapRect['X2']; $x++) {
                 $overlap["$x,$y"] = true;
             }
         }

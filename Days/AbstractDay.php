@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 use AoC2018\Utility\Cli;
 
 abstract class AbstractDay extends Cli
@@ -114,7 +113,7 @@ abstract class AbstractDay extends Cli
             if ($nickname === '') {
                 $input = $this->downloadPuzzleInput($this->config['day_nr']);
                 if (!$input) {
-                    $this->logLine("Download the input file by hand or store your session Cookie in an .env file!", self::$COLOR_LIGHT_PURPLE);
+                    $this->LogText("[LP]Download the input file by hand or store your session Cookie in an .env file!");
                     exit(0);
                 }
                 $this->logLine("Saved downloaded input as $fileName", self::$COLOR_LIGHT_GREEN);

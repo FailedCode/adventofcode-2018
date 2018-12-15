@@ -5,7 +5,6 @@ namespace AoC2018\Days;
 
 use AoC2018\Days\Day8\Node;
 
-
 class Day8 extends AbstractDay
 {
     protected $title = 'Memory Maneuver';

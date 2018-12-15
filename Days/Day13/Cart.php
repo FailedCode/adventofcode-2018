@@ -3,9 +3,6 @@
 
 namespace AoC2018\Days\Day13;
 
-
-use function Sodium\crypto_aead_aes256gcm_decrypt;
-
 class Cart
 {
     protected $x;

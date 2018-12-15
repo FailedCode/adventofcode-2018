@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day1 extends AbstractDay
 {
     protected $title = 'Chronal Calibration';

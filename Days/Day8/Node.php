@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days\Day8;
 
-
 class Node
 {
 

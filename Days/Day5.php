@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day5 extends AbstractDay
 {
     protected $title = 'Alchemical Reduction';

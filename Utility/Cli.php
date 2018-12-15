@@ -2,7 +2,6 @@
 
 namespace AoC2018\Utility;
 
-
 class Cli
 {
     use Traits\LogTrait;

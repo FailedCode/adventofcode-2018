@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day6 extends AbstractDay
 {
     protected $title = 'Chronal Coordinates';
@@ -20,7 +19,6 @@ class Day6 extends AbstractDay
         foreach ($coordinates as $name => $coordinate) {
             for ($y = 0; $y < $Ymax; $y++) {
                 for ($x = 0; $x < $Xmax; $x++) {
-
                     // initalize empty fields
                     if (!isset($map[$y][$x])) {
                         $map[$y][$x] = '';
@@ -80,10 +78,18 @@ class Day6 extends AbstractDay
         $Ymin = PHP_INT_MAX;
         $Ymax = -1;
         foreach ($coordinates as $coord) {
-            if ($coord[0] < $Xmin) $Xmin = $coord[0];
-            if ($coord[1] < $Ymin) $Ymin = $coord[1];
-            if ($coord[0] > $Xmax) $Xmax = $coord[0];
-            if ($coord[1] > $Ymax) $Ymax = $coord[1];
+            if ($coord[0] < $Xmin) {
+                $Xmin = $coord[0];
+            }
+            if ($coord[1] < $Ymin) {
+                $Ymin = $coord[1];
+            }
+            if ($coord[0] > $Xmax) {
+                $Xmax = $coord[0];
+            }
+            if ($coord[1] > $Ymax) {
+                $Ymax = $coord[1];
+            }
         }
         return [[$Xmin, $Ymin], [$Xmax, $Ymax]];
     }

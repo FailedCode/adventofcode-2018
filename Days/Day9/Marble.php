@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days\Day9;
 
-
 class Marble
 {
     /**
@@ -83,7 +82,11 @@ class Marble
 
     public function log()
     {
-        return $this->prev->prev->getValue() . " <- " . $this->prev->getValue() . " <- " . $this->getValue() . " -> " . $this->next->getValue() . " -> " . $this->next->next->getValue();
+        return $this->prev->prev->getValue() .
+            " <- " . $this->prev->getValue() .
+            " <- " . $this->getValue() . " -> " .
+            $this->next->getValue() . " -> " .
+            $this->next->next->getValue();
     }
 
     public function toArray()
@@ -99,5 +102,4 @@ class Marble
             }
         }
     }
-
 }

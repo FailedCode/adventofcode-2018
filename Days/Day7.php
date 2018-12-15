@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day7 extends AbstractDay
 {
     protected $title = 'The Sum of Its Parts';
@@ -65,7 +64,6 @@ class Day7 extends AbstractDay
         $mustBeFinishedBefore = $this->getSteps();
         $time = 0;
         while (true) {
-
             $freeWorkers = [];
             foreach ($workers as $id => &$worker) {
                 if ($worker['task'] === '') {
@@ -101,8 +99,6 @@ class Day7 extends AbstractDay
 //                $this->logLine("[$time] worker $id starts with $nextStep, will take {$workers[$id]['time']}s");
             }
 
-//            $this->logLine("[$time] Workers: {$workers[0]['task']}|{$workers[1]['task']}|{$workers[2]['task']}|{$workers[3]['task']}|{$workers[4]['task']}");
-
             // If all workers are idle, there is nothing more to do
             if (count($freeWorkers) == 5) {
 //                $this->logLine("[$time] all workers free: END");
@@ -126,15 +122,18 @@ class Day7 extends AbstractDay
         // key: character, value: array of needing completion first
         $steps = [];
         $lines = $this->readinput();
-        foreach ($lines as  $line) {
+        foreach ($lines as $line) {
             preg_match_all('~[Ss]tep\s([A-z])~', $line, $match);
             $prerequisite = $match[1][0];
             $step = $match[1][1];
-            if (!isset($steps[$step])) $steps[$step] = [];
-            if (!isset($steps[$prerequisite])) $steps[$prerequisite] = [];
+            if (!isset($steps[$step])) {
+                $steps[$step] = [];
+            }
+            if (!isset($steps[$prerequisite])) {
+                $steps[$prerequisite] = [];
+            }
             $steps[$step][] = $prerequisite;
         }
         return $steps;
     }
-
 }

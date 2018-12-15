@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days;
 
-
 class Day2 extends AbstractDay
 {
     protected $title = 'Inventory Management System';
@@ -45,8 +44,7 @@ class Day2 extends AbstractDay
                 }
 
                 $common = $this->differenceOnceStrings($id1, $id2);
-                if (is_array($common))
-                {
+                if (is_array($common)) {
                     return implode('', $common);
                 }
             }

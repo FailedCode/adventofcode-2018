@@ -21,12 +21,15 @@ if (array_search('--help', $argv) !== false) {
 }
 
 if (array_search('--psr2-check', $argv) !== false) {
-    exec("vendor/bin/phpcs --colors --standard=PSR2 Utility/ Days/ runDay.php", $output);
+    exec("vendor/bin/phpcs --colors --standard=PSR2 Utility/ Days/ runDay.php", $output, $result);
     foreach ($output as $line) {
         if (preg_match('~FILE: (.*)~', $line, $match)) {
             $line = str_replace(__dir__, '', $line);
         }
         $cli->logLine($line);
+    }
+    if ($result === 0) {
+        $cli->logText("[LG]OK");
     }
     exit(0);
 }

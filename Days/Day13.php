@@ -37,7 +37,6 @@ class Day13 extends AbstractDay
         for ($y = 0; $y < $height; $y++) {
             $line = '';
             for ($x = 0; $x < $width; $x++) {
-
                 if (!is_null($carts[$y][$x])) {
                     $line .= $this->colorString($carts[$y][$x]->draw(), 'yellow');
                 } else {
@@ -54,7 +53,6 @@ class Day13 extends AbstractDay
         Cart::resetMoves();
         for ($y = 0; $y < $height; $y++) {
             for ($x = 0; $x < $width; $x++) {
-
                 if (is_null($carts[$y][$x])) {
                     continue;
                 }

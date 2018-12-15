@@ -3,7 +3,6 @@
 
 namespace AoC2018\Days\Day10;
 
-
 class Char
 {
     public static function get($data)
