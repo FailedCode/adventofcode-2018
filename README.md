@@ -18,6 +18,10 @@ In case you do not have curl installed:
 
 `sudo apt-get install php-curl`
 
+In case you do not have curl installed:
+
+`sudo apt-get install php-xml`
+
 Copy the .env.dist file
 
 `cp .env.dist .env`
@@ -46,6 +50,10 @@ Runs only the second part of day 2.
 `./runDay.php 2 --test`
 
 Tests, if the results for day 2 changed.
+
+`./runDay.php 2 --psr2-check`
+
+Check code for PSR-2 violations
 
 ## Resources
 

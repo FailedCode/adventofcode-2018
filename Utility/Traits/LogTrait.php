@@ -28,7 +28,11 @@ trait LogTrait
      */
     public function logText($text)
     {
-        $lines = explode("\n", $text);
+        if (is_array($text)) {
+            $lines = $text;
+        } else {
+            $lines = explode("\n", $text);
+        }
         $output = [];
         $color = false;
 
@@ -280,7 +284,7 @@ trait LogTrait
             'y' => 'yellow',
             'w' => 'white',
             'x' => 'black',
-            '' => 'light_gray',
+            '' => 'white',
         ];
         if (isset($aliases[$color])) {
             return $aliases[$color];

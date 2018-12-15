@@ -8,14 +8,26 @@ array_shift($argv);
 $cli = new \AoC2018\Utility\Cli();
 
 if (array_search('--help', $argv) !== false) {
-    $cli->logText(
-        "[Y]Usage: \n" .
-        "[W]./runDay.php 1[] => run day 1\n" .
-        "[W]./runDay.php 1 2 3[] => run days 1, 2 and 3\n" .
-        "[W]./runDay.php 2p1[] => run day 2 only part 1\n" .
-        "[W]./runDay.php 2p2[] => run day 2 only part 2\n" .
-        "[W]./runDay.php 2 --test[] => test day 2 results"
-    );
+    $cli->logText([
+            "[Y]Usage:",
+            "[W]./runDay.php [B]1[] => run day 1",
+            "[W]./runDay.php [B]1 2 3[] => run days 1, 2 and 3",
+            "[W]./runDay.php [B]2p1[] => run day 2 only part 1",
+            "[W]./runDay.php [B]2p2[] => run day 2 only part 2",
+            "[W]./runDay.php [B]2[G] --test[] => test day 2 results",
+            "[W]./runDay.php [G]--psr2-check[] => check code for PSR-2 violations",
+    ]);
+    exit(0);
+}
+
+if (array_search('--psr2-check', $argv) !== false) {
+    exec("vendor/bin/phpcs --colors --standard=PSR2 Utility/ Days/ runDay.php", $output);
+    foreach ($output as $line) {
+        if (preg_match('~FILE: (.*)~', $line, $match)) {
+            $line = str_replace(__dir__, '', $line);
+        }
+        $cli->logLine($line);
+    }
     exit(0);
 }
 
