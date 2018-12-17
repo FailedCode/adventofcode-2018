@@ -100,6 +100,23 @@ class Unit
     }
 
     /**
+     * @param $tileMap
+     * @return array
+     */
+    public function getAdjectedFreeTiles($tileMap)
+    {
+        $positions = [];
+        foreach ([[0, -1], [-1, 0], [1, 0], [0, 1]] as $position) {
+            $x = $position[0] + $this->x;
+            $y = $position[1] + $this->y;
+            if ($tileMap[$y][$x] == 0) {
+                $positions[] = [$x, $y];
+            }
+        }
+        return $positions;
+    }
+
+    /**
      * @param Unit $enemy
      * @return bool
      */
@@ -113,35 +130,79 @@ class Unit
         return false;
     }
 
+
+    /**
+     * To move, the unit first considers the squares that
+     * are in range and determines which of those squares
+     * it could reach in the fewest steps
+     *
+     * If multiple squares are in range and tied for being
+     * reachable in the fewest steps, the square which is
+     * first in reading order is chosen.
+     *
+     * If multiple steps would put the unit equally closer
+     * to its destination, the unit chooses the step which
+     * is first in reading order.
+     *
+     * @param $tileMap
+     * @return bool|mixed
+     */
     public function getNewPosition($tileMap)
     {
-        $newPositions = [];
-        $units = self::getList();
+        $possiblePositions = [];
 
         /** @var Unit $unit */
-        foreach ($units as $unit) {
+        foreach (self::getList() as $unit) {
             if ($unit->type == $this->type) {
                 continue;
             }
-            $path = $this->getPathAStar($this->getPosition(), $unit->getPosition(), $tileMap);
-            if ($path !== false) {
-                $newPositions[] = $path[0];
+            $possiblePositions = array_merge($possiblePositions, $unit->getAdjectedFreeTiles($tileMap));
+        }
+
+        // remove unreachable
+        foreach ($possiblePositions as $key => &$position) {
+            $path = $this->getPathAStar($this->getPosition(), $position, $tileMap);
+            if ($path === false) {
+                unset($possiblePositions[$key]);
+                continue;
+            }
+            // calculate distance...
+            $position[2] = $this->manhattanDistance($this->getPosition(), $position);
+        }
+
+        // nothing reachable
+        if (count($possiblePositions) == 0) {
+            return false;
+        }
+
+        if (count($possiblePositions) > 1) {
+            usort($possiblePositions, function ($a, $b){
+                return $a[2] - $b[2];
+            });
+        }
+
+        // find the nearest tiles
+        $smalestDistance = $possiblePositions[0][2];
+        $smallestPositions = [];
+        foreach ($possiblePositions as $position) {
+            if ($position[2] == $smalestDistance) {
+                $smallestPositions[] = [$position[0], $position[1]];
             }
         }
 
-        //$newPositions = array_unique($newPositions);
-        $enemiesCount = count($newPositions);
-//        if ($enemiesCount > 1) {
-//            usort($enemies, function ($a, $b){
-//                // difference of path length
-//                return $a[1] - $b[1];
-//            });
-//        }
-
-        if ($enemiesCount > 0) {
-            return $newPositions[0];
+        // order tiles by reading order
+        if (count($smallestPositions) > 1) {
+            usort($smallestPositions, function ($a, $b){
+                $yDiff = $a[1] - $b[1];
+                if ($yDiff == 0) {
+                    return $a[0] - $b[0];
+                }
+                return $yDiff;
+            });
         }
-        return false;
+
+        $path = $this->getPathAStar($this->getPosition(), $smallestPositions[0], $tileMap);
+        return $path[0];
     }
 
 

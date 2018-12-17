@@ -29,15 +29,16 @@ class Day15 extends AbstractDay
             }
             $round += 1;
 
-            $this->logText("round: $round");
-            foreach (Unit::getList() as $unit) {
-                $this->logText($unit->getType() . " ".$unit->getHP()." ");
-//                $this->log($unit->getPosition());
+//            $this->logText("round: $round");
+//            foreach (Unit::getList() as $unit) {
+//                $this->logText($unit->getType() . " ".$unit->getHP()." ");
+//            }
+
+            // problem: moved friendlies block way => calculate move first, then move all at once (?)
+            if ($round > 22) {
+                $this->waitkey("$round >");
             }
 
-            readline_callback_handler_install('>', function() {});
-            $char = stream_get_contents(STDIN, 1);
-            readline_callback_handler_remove();
         }
 
 
