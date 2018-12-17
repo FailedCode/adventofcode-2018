@@ -122,6 +122,68 @@ class Day16 extends AbstractDay
 
     protected function part2()
     {
+        list($before, $instructions, $after, $testprogramm) = $this->getInput(2);
+        $opCodes = $this->findOpcodes($before, $instructions, $after);
+
+        $registers = array_fill(0, 4, 0);
+        foreach ($testprogramm as $instructions) {
+            $method = "opCode" . $opCodes[$instructions[0]];
+            $this->$method($registers, $instructions);
+        }
+
+        return $registers[0];
+    }
+
+    protected function findOpcodes($before, $instructions, $after)
+    {
+        $opCodeIDSuccess = [];
+        $opcodes = [
+            'Addr' => 0, 'Addi' => 0,
+            'Mulr' => 0, 'Muli' => 0,
+            'Banr' => 0, 'Bani' => 0,
+            'Borr' => 0, 'Bori' => 0,
+            'Setr' => 0, 'Seti' => 0,
+            'Gtir' => 0, 'Gtri' => 0, 'Gtrr' => 0,
+            'Eqir' => 0, 'Eqri' => 0, 'Eqrr' => 0,
+        ];
+
+        $length = count($before);
+        for ($i = 0; $i < $length; $i++) {
+            foreach ($opcodes as $opcode => &$count) {
+                $method = "opCode$opcode";
+                $registers = $before[$i];
+                $this->$method($registers, $instructions[$i]);
+                if ($registers == $after[$i]) {
+                    $count += 1;
+                    $codeNo = $instructions[$i][0];
+                    if (!isset($opCodeIDSuccess[$codeNo])) {
+                        $opCodeIDSuccess[$codeNo] = [];
+                    }
+                    if (!isset($opCodeIDSuccess[$codeNo][$opcode])) {
+                        $opCodeIDSuccess[$codeNo][$opcode] = 0;
+                    }
+                    $opCodeIDSuccess[$codeNo][$opcode] += 1;
+                }
+            }
+        }
+
+        // use the opcode where the least (one) possible
+        // opcode is recorded and remove it from the rest
+        $opCodeIDtoName = [];
+        while (!empty($opCodeIDSuccess)) {
+            $min = min($opCodeIDSuccess);
+            $opNo = array_keys($opCodeIDSuccess,$min)[0];
+            $opcode = array_keys($min)[0];
+            $opCodeIDtoName[$opNo] = $opcode;
+            foreach ($opCodeIDSuccess as $key => &$item) {
+                unset($item[$opcode]);
+                if (count($item) == 0) {
+                    unset($opCodeIDSuccess[$key]);
+                }
+            }
+        }
+
+        return $opCodeIDtoName;
     }
 
     protected function readinput()
@@ -158,6 +220,15 @@ class Day16 extends AbstractDay
             return [$before, $instructions, $after];
         }
 
-        return false;
+        $testprogram = [];
+        foreach ($lines as $line) {
+            if ($i > 0) {
+                $i -= 1;
+                continue;
+            }
+            $testprogram[] = explode(' ', $line);
+        }
+
+        return [$before, $instructions, $after, $testprogram];
     }
 }
