@@ -1,7 +1,8 @@
 {
   "require": {
     "php": "7.2.*",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "ext-readline": "*"
   },
   "autoload": {
     "psr-4": {

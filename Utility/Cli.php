@@ -54,4 +54,14 @@ class Cli
             }
         }
     }
+
+    public function waitkey($prompt = '>')
+    {
+        readline_callback_handler_install($prompt, function() {});
+        stream_get_contents(STDIN, 1);
+        readline_callback_handler_remove();
+        echo str_repeat(chr(8), strlen($prompt));
+        echo str_repeat(' ', strlen($prompt));
+        echo str_repeat(chr(8), strlen($prompt));
+    }
 }
